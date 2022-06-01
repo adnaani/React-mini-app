@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 
-function App() {
+import data from "./components/LectureData";
+import filterData from "./utils/filterData";
+import { Header } from "./components/Header";
+import { DisplayOnCard } from "./components/DisplayOnCard";
+import { SearchBar } from "./components/SearchBar";
+import { useState } from "react";
+
+const App = () => {
+  const { search } = window.location;
+  const query = new URLSearchParams(search).get("s");
+  const [searchQuery, setSearchQuery] = useState(query || "");
+  const filteredData = filterData(data, searchQuery);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      {filteredData.map((data, i) => (
+        <DisplayOnCard key={i} lectureData={data} />
+      ))}
     </div>
   );
-}
+};
 
 export default App;
